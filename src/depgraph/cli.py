@@ -4,8 +4,9 @@ import sys
 
 from .apt import AptRepository
 from .config import parse_config
+from .dot import render_png, to_dot
 from .errors import DepGraphError, RepoError
-from .graph import build_graph, format_edges
+from .graph import build_graph
 from .order import format_order, load_order
 from .testrepo import GraphFileRepository
 
@@ -29,14 +30,17 @@ def find_package(repo, name):
 
 
 def run(config):
-    """Строит граф и выводит его ребра или порядок загрузки."""
+    """Строит граф, выводит порядок загрузки или рисует граф."""
     repo = load_repository(config)
     root = find_package(repo, config.package)
     graph = build_graph(repo, root, config.max_depth)
     if config.order:
         print("\n".join(format_order(load_order(graph))))
         return
-    print("\n".join(format_edges(graph)))
+    dot_text = to_dot(graph)
+    print(dot_text, end="")
+    render_png(dot_text, config.output)
+    print(f"saved image to {config.output}", file=sys.stderr)
 
 
 def main(argv=None):

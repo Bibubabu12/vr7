@@ -15,3 +15,7 @@ class RepoError(DepGraphError):
 
 class GraphError(DepGraphError):
     """Граф зависимостей не может быть построен."""
+
+
+class RenderError(DepGraphError):
+    """Изображение графа не может быть создано."""

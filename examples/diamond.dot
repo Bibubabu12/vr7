@@ -1,0 +1,11 @@
+digraph dependencies {
+    rankdir=LR;
+    "A" [shape=box, style=filled, fillcolor="#cfe8ff"];
+    "B";
+    "D";
+    "C";
+    "A" -> "B";
+    "A" -> "C";
+    "B" -> "D";
+    "C" -> "D";
+}

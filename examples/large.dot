@@ -1,0 +1,36 @@
+digraph dependencies {
+    rankdir=LR;
+    "A" [shape=box, style=filled, fillcolor="#cfe8ff"];
+    "B";
+    "E";
+    "I";
+    "L";
+    "F";
+    "J";
+    "M";
+    "C";
+    "G";
+    "K";
+    "D";
+    "H";
+    "A" -> "B";
+    "A" -> "C";
+    "A" -> "D";
+    "B" -> "E";
+    "B" -> "F";
+    "E" -> "I";
+    "I" -> "L";
+    "F" -> "I";
+    "F" -> "J";
+    "J" -> "L";
+    "J" -> "M";
+    "M" -> "A" [color=red, constraint=false];
+    "C" -> "F";
+    "C" -> "G";
+    "G" -> "J";
+    "G" -> "K";
+    "K" -> "M";
+    "D" -> "G";
+    "D" -> "H";
+    "H" -> "K";
+}
