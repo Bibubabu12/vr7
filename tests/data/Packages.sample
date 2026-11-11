@@ -1,0 +1,30 @@
+Package: app
+Version: 1.0
+Depends: libc6 (>= 2.34), libssl3 | libgnutls30, awk,
+ zlib1g:any, missing-pkg [amd64]
+Pre-Depends: base-files
+
+Package: libc6
+Version: 2.35
+Depends: libgcc-s1
+
+Package: libgcc-s1
+Version: 12
+Depends: libc6 (>= 2.34)
+
+Package: libssl3
+Version: 3.0
+Depends: libc6, zlib1g
+
+Package: mawk
+Version: 1.3
+Provides: awk
+Depends: libc6
+
+Package: zlib1g
+Version: 1.2
+Depends: libc6
+
+Package: base-files
+Version: 12
+Depends: mawk

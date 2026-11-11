@@ -7,3 +7,7 @@ class DepGraphError(Exception):
 
 class ConfigError(DepGraphError):
     """Переданный пользователем параметр отсутствует или недействителен."""
+
+
+class RepoError(DepGraphError):
+    """Репозиторий не может быть прочитан или не содержит пакет."""

@@ -6,9 +6,9 @@
 
 ## Состояние
 
-Этап 1: параметры из командной строки и их проверка.
-На этом этапе инструмент выводит все параметры в формате
-`ключ=значение`.
+Этапы 1-2: параметры из командной строки; сбор прямых зависимостей
+пакета из индекса `Packages` (форматы: обычный, `.gz`, `.xz`).
+На этом этапе инструмент выводит прямые зависимости пакета.
 
 ## Параметры командной строки
 
@@ -35,24 +35,23 @@ make test
 
 ```
 make run ARGS="-p curl -r https://archive.ubuntu.com/ubuntu/dists/jammy/main/binary-amd64/Packages.gz -d 2"
+make run ARGS="-p curl -r http://x -d -1"
 ```
 
-Вывод:
+## Как собираются зависимости
+
+* Индекс репозитория скачивается по URL (`urllib`) и разбирается
+  собственным парсером формата `Packages` (абзацы `Поле: значение`).
+* Прямые зависимости — поля `Pre-Depends` и `Depends`.
+* Из версионных ограничений, архитектур (`:any`, `[amd64]`) остаются
+  только имена пакетов.
+* Для альтернатив `a | b` выбирается первая, найденная в индексе.
+* Виртуальные пакеты (`Provides`) заменяются первым пакетом-поставщиком.
+* Зависимость, которой нет в индексе, считается листом графа.
 
 ```
-package=curl
-repo=https://archive.ubuntu.com/ubuntu/dists/jammy/main/binary-amd64/Packages.gz
-test_mode=False
-output=graph.png
-max_depth=2
+make run ARGS="-p curl -r https://archive.ubuntu.com/ubuntu/dists/jammy/main/binary-amd64/Packages.gz"
+make run ARGS="-p app -r file://$PWD/tests/data/Packages.sample"
 ```
 
-Примеры ошибок:
-
-```
-make run ARGS="-p curl -r http://x -d -1"      # error: максимальная глубина должна быть >= 0
-make run ARGS="-p curl -r ftp://x"             # error: репозиторий должен быть http(s) или file URL
-make run ARGS="-p 'Bad Name' -r http://x"      # error: недопустимое имя пакета
-make run ARGS="-t -p A -r missing.txt"         # error: файл тестового репозитория не найден
-make run ARGS="-p curl -r http://x -o g.txt"   # error: выходной файл должен заканчиваться на .png
-```
+`tests/data/Packages.sample` — небольшой синтетический индекс для тестов.

@@ -6,7 +6,7 @@ import os
 import tempfile
 import unittest
 
-from depgraph.cli import EXIT_ERROR, EXIT_OK, main
+from depgraph.cli import EXIT_ERROR, main
 from depgraph.config import parse_config
 from depgraph.errors import ConfigError
 
@@ -79,16 +79,3 @@ class CliTest(unittest.TestCase):
             code = main(["-p", "curl", "-r", URL, "-d", "-3"])
         self.assertEqual(code, EXIT_ERROR)
         self.assertIn("error:", err.getvalue())
-
-    def test_prints_parameters(self):
-        """При успешном запуске параметры выводятся как ключ=значение."""
-        out = io.StringIO()
-        with contextlib.redirect_stdout(out):
-            code = main(["-p", "curl", "-r", URL, "-d", "2"])
-        self.assertEqual(code, EXIT_OK)
-        lines = out.getvalue().splitlines()
-        self.assertIn("package=curl", lines)
-        self.assertIn(f"repo={URL}", lines)
-        self.assertIn("test_mode=False", lines)
-        self.assertIn("output=graph.png", lines)
-        self.assertIn("max_depth=2", lines)
