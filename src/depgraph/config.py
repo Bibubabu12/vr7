@@ -25,6 +25,7 @@ class Config:
     test_mode: bool
     output: str
     max_depth: int
+    order: bool = False
 
 
 class _Parser(argparse.ArgumentParser):
@@ -60,6 +61,10 @@ def build_parser():
     parser.add_argument(
         "-d", "--max-depth", default=str(DEFAULT_DEPTH),
         help="максимальная глубина зависимостей (по умолчанию: %(default)s)",
+    )
+    parser.add_argument(
+        "--order", action="store_true",
+        help="вывести порядок загрузки вместо отрисовки графа",
     )
     return parser
 
@@ -113,4 +118,5 @@ def parse_config(argv=None):
         test_mode=args.test_mode,
         output=args.output,
         max_depth=parse_depth(args.max_depth),
+        order=args.order,
     )

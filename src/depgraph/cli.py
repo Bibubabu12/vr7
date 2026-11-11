@@ -6,6 +6,7 @@ from .apt import AptRepository
 from .config import parse_config
 from .errors import DepGraphError, RepoError
 from .graph import build_graph, format_edges
+from .order import format_order, load_order
 from .testrepo import GraphFileRepository
 
 EXIT_OK = 0
@@ -28,10 +29,13 @@ def find_package(repo, name):
 
 
 def run(config):
-    """Строит граф зависимостей и выводит его ребра."""
+    """Строит граф и выводит его ребра или порядок загрузки."""
     repo = load_repository(config)
     root = find_package(repo, config.package)
     graph = build_graph(repo, root, config.max_depth)
+    if config.order:
+        print("\n".join(format_order(load_order(graph))))
+        return
     print("\n".join(format_edges(graph)))
 
 

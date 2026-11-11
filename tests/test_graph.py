@@ -112,10 +112,10 @@ class CliTest(unittest.TestCase):
     def test_test_mode(self):
         """CLI работает с файлом тестового репозитория."""
         path = str(EXAMPLES / "chain.txt")
-        args = ("-t", "-p", "A", "-r", path, "-d", "1")
+        args = ("-t", "-p", "A", "-r", path, "-d", "1", "--order")
         code, lines = self.run_cli(*args)
         self.assertEqual(code, EXIT_OK)
-        self.assertEqual(lines, ["A -> B", "B"])
+        self.assertEqual(lines, ["1. B", "2. A"])
 
     def test_unknown_package(self):
         """Отсутствующий в тестовом репозитории пакет вызывает ошибку."""

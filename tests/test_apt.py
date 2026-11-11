@@ -82,11 +82,11 @@ class RepositoryTest(unittest.TestCase):
         """CLI строит граф из индекса apt."""
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            code = main(["-p", "app", "-r", SAMPLE.as_uri()])
+            code = main(["-p", "app", "-r", SAMPLE.as_uri(), "--order"])
         self.assertEqual(code, EXIT_OK)
         lines = out.getvalue().splitlines()
-        self.assertIn("app -> libc6", lines)
-        self.assertIn("libc6 -> libgcc-s1", lines)
+        self.assertEqual(lines[-1], f"{len(lines)}. app")
+        self.assertIn("2. libc6", lines)
 
     def test_cli_unknown_package(self):
         """Неизвестный корневой пакет вызывает ошибку."""
