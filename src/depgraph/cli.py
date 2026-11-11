@@ -5,15 +5,17 @@ import sys
 from .apt import AptRepository
 from .config import parse_config
 from .errors import DepGraphError, RepoError
+from .graph import build_graph, format_edges
+from .testrepo import GraphFileRepository
 
 EXIT_OK = 0
 EXIT_ERROR = 1
 
 
 def load_repository(config):
-    """Открыть реальный индекс apt."""
+    """Открыть реальный индекс apt или файл тестового репозитория."""
     if config.test_mode:
-        raise RepoError("тестовый режим пока не поддерживается")
+        return GraphFileRepository.from_file(config.repo)
     return AptRepository.from_url(config.repo)
 
 
@@ -26,11 +28,11 @@ def find_package(repo, name):
 
 
 def run(config):
-    """Выводит прямые зависимости заданного пакета."""
+    """Строит граф зависимостей и выводит его ребра."""
     repo = load_repository(config)
     root = find_package(repo, config.package)
-    for dependency in repo.dependencies(root):
-        print(dependency)
+    graph = build_graph(repo, root, config.max_depth)
+    print("\n".join(format_edges(graph)))
 
 
 def main(argv=None):

@@ -79,16 +79,14 @@ class RepositoryTest(unittest.TestCase):
             AptRepository.from_url("file:///no/such/Packages")
 
     def test_cli_real_mode(self):
-        """CLI выводит прямые зависимости пакета из индекса apt."""
+        """CLI строит граф из индекса apt."""
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             code = main(["-p", "app", "-r", SAMPLE.as_uri()])
         self.assertEqual(code, EXIT_OK)
-        self.assertEqual(
-            out.getvalue().splitlines(),
-            ["base-files", "libc6", "libssl3", "mawk", "zlib1g",
-             "missing-pkg"],
-        )
+        lines = out.getvalue().splitlines()
+        self.assertIn("app -> libc6", lines)
+        self.assertIn("libc6 -> libgcc-s1", lines)
 
     def test_cli_unknown_package(self):
         """Неизвестный корневой пакет вызывает ошибку."""

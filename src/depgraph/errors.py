@@ -11,3 +11,7 @@ class ConfigError(DepGraphError):
 
 class RepoError(DepGraphError):
     """Репозиторий не может быть прочитан или не содержит пакет."""
+
+
+class GraphError(DepGraphError):
+    """Граф зависимостей не может быть построен."""
