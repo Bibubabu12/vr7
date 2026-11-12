@@ -18,7 +18,7 @@ class Graph:
         return list(self.edges)
 
 
-class _Walker:
+class GraphWalker:
     """Рекурсивный DFS с ограничением глубины и учётом кратчайшего пути."""
 
     def __init__(self, repo, max_depth):
@@ -60,7 +60,7 @@ def build_graph(repo, root, max_depth):
     Пакеты на пределе глубины включаются в граф, но не раскрываются. Циклы
     останавливают обход и перечисляются в ``Graph.cycles``.
     """
-    walker = _Walker(repo, max_depth)
+    walker = GraphWalker(repo, max_depth)
     walker.graph = Graph(root)
     try:
         walker.visit(root, 0)

@@ -28,7 +28,7 @@ class Config:
     order: bool = False
 
 
-class _Parser(argparse.ArgumentParser):
+class CliParser(argparse.ArgumentParser):
     """Парсер аргументов, сообщающий о проблемах как ConfigError."""
 
     def error(self, message):
@@ -38,7 +38,7 @@ class _Parser(argparse.ArgumentParser):
 
 def build_parser():
     """Создает парсер параметров командной строки."""
-    parser = _Parser(
+    parser = CliParser(
         prog="depgraph",
         description="Визуализатор графа зависимостей для apt-пакетов.",
     )
