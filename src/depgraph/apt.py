@@ -27,14 +27,16 @@ def download(url):
 
 
 def decompress(raw):
-    """Возвращает текст индекса; gzip и xz определяются по сигнатуре (magic bytes)."""
+    """Возвращает текст индекса; gzip и xz узнаются по сигнатуре."""
     try:
         if raw.startswith(GZIP_MAGIC):
             raw = gzip.decompress(raw)
         elif raw.startswith(XZ_MAGIC):
             raw = lzma.decompress(raw)
     except (OSError, EOFError, zlib.error, lzma.LZMAError) as exc:
-        raise RepoError(f"не удалось распаковать индекс пакетов: {exc}") from exc
+        raise RepoError(
+            f"не удалось распаковать индекс пакетов: {exc}"
+        ) from exc
     return raw.decode("utf-8", errors="replace")
 
 
@@ -83,7 +85,7 @@ def parse_dependency_field(value):
 
 
 def build_providers(packages):
-    """Сопоставляет имена виртуальных пакетов первому пакету, предоставляющему их."""
+    """Сопоставляет виртуальным пакетам первого их поставщика."""
     providers = {}
     for name, fields in packages.items():
         for group in parse_dependency_field(fields.get(PROVIDES_FIELD, "")):

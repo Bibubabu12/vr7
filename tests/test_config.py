@@ -17,7 +17,7 @@ class ConfigTest(unittest.TestCase):
     """Проверка каждого предоставленного пользователем параметра."""
 
     def test_valid_real_mode(self):
-        """Валидные опции создают объект Config с заполненными значениями по умолчанию."""
+        """Валидные опции дают Config со значениями по умолчанию."""
         config = parse_config(["-p", "curl", "-r", URL])
         self.assertEqual(config.package, "curl")
         self.assertEqual(config.max_depth, 3)
@@ -47,7 +47,7 @@ class ConfigTest(unittest.TestCase):
             parse_config(["-t", "-p", "a", "-r", __file__])
 
     def test_invalid_repo(self):
-        """Репозиторий должен быть URL или существующим файлом в тестовом режиме."""
+        """Репозиторий: URL или существующий файл в тестовом режиме."""
         with self.assertRaises(ConfigError):
             parse_config(["-p", "curl", "-r", "ftp://example.org"])
         with self.assertRaises(ConfigError):

@@ -70,7 +70,7 @@ def build_parser():
 
 
 def check_package(name, test_mode):
-    """Проверяет имя пакета на соответствие правилам именования для текущего режима."""
+    """Проверяет имя пакета по правилам именования текущего режима."""
     pattern = TEST_NAME if test_mode else APT_NAME
     if not pattern.fullmatch(name):
         kind = "заглавные латинские буквы" if test_mode else "имя apt"
@@ -83,13 +83,17 @@ def check_repo(repo, test_mode):
         if not os.path.isfile(repo):
             raise ConfigError(f"файл тестового репозитория не найден: {repo}")
     elif not repo.startswith(URL_PREFIXES):
-        raise ConfigError(f"репозиторий должен быть http(s) или file URL: {repo}")
+        raise ConfigError(
+            f"репозиторий должен быть http(s) или file URL: {repo}"
+        )
 
 
 def check_output(path):
     """Проверяет, что изображение может быть записано по указанному пути."""
     if not path.lower().endswith(IMAGE_SUFFIX):
-        raise ConfigError(f"выходной файл должен заканчиваться на {IMAGE_SUFFIX}")
+        raise ConfigError(
+            f"выходной файл должен заканчиваться на {IMAGE_SUFFIX}"
+        )
     folder = os.path.dirname(path) or os.curdir
     if not os.path.isdir(folder):
         raise ConfigError(f"выходная директория не существует: {folder}")
@@ -100,9 +104,13 @@ def parse_depth(text):
     try:
         value = int(text)
     except ValueError:
-        raise ConfigError(f"максимальная глубина должна быть целым числом: {text!r}") from None
+        raise ConfigError(
+            f"максимальная глубина должна быть целым числом: {text!r}"
+        ) from None
     if value < MIN_DEPTH:
-        raise ConfigError(f"максимальная глубина должна быть >= {MIN_DEPTH}: {value}")
+        raise ConfigError(
+            f"максимальная глубина должна быть >= {MIN_DEPTH}: {value}"
+        )
     return value
 
 

@@ -1,4 +1,4 @@
-"""Построение графа зависимостей с использованием рекурсивного обхода в глубину (DFS)."""
+"""Построение графа зависимостей рекурсивным обходом в глубину (DFS)."""
 
 from dataclasses import dataclass, field
 
@@ -19,7 +19,7 @@ class Graph:
 
 
 class _Walker:
-    """Рекурсивный DFS с ограничением глубины, сохраняющий наименьшую глубину."""
+    """Рекурсивный DFS с ограничением глубины и учётом кратчайшего пути."""
 
     def __init__(self, repo, max_depth):
         """Подготавливает пустое состояние обхода."""
@@ -39,7 +39,7 @@ class _Walker:
             self.graph.cycles.append(pair)
 
     def visit(self, name, level):
-        """Посещает пакет; повторяет посещение только при достижении более коротким путем."""
+        """Посещает пакет; повторно — только по более короткому пути."""
         known = self.depth.get(name)
         if known is not None and known <= level:
             return
@@ -72,7 +72,7 @@ def build_graph(repo, root, max_depth):
 
 
 def format_edges(graph):
-    """Возвращает строчки текста, описывающие ребра, изолированные узлы и циклы."""
+    """Возвращает строки с ребрами, изолированными узлами и циклами."""
     lines = []
     for name, dependencies in graph.edges.items():
         if dependencies:

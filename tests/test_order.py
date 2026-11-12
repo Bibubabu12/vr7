@@ -28,7 +28,7 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(order_of("chain"), ["D", "C", "B", "A"])
 
     def test_diamond(self):
-        """Общая зависимость загружается один раз, перед обеими зависимыми сторонами."""
+        """Общая зависимость грузится один раз, раньше обоих зависящих."""
         self.assertEqual(order_of("diamond"), ["D", "B", "C", "A"])
 
     def test_cycle_terminates(self):

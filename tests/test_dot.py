@@ -47,7 +47,7 @@ class DotTextTest(unittest.TestCase):
         self.assertNotIn('"A" -> "B" [', text)
 
     def test_isolated_root(self):
-        """Граф, состоящий только из корня, все еще является валидным DOT-файлом."""
+        """Граф из одного корня — всё ещё валидный DOT."""
         text = to_dot(graph_of("chain", depth=0))
         self.assertEqual(text.count("->"), 0)
         self.assertTrue(text.rstrip().endswith("}"))

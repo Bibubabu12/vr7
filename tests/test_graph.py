@@ -23,7 +23,7 @@ class ParseTest(unittest.TestCase):
     """Разбор формата тестового репозитория."""
 
     def test_parse(self):
-        """Комментарии, пустые строки и конечные пакеты обрабатываются корректно."""
+        """Комментарии, пустые строки и листья разбираются верно."""
         graph = parse_graph_text("A: B C  # note\n\nB:\n")
         self.assertEqual(graph, {"A": ["B", "C"], "B": [], "C": []})
 
@@ -70,12 +70,12 @@ class BuildTest(unittest.TestCase):
         self.assertEqual(graph.cycles, [("C", "A"), ("C", "B")])
 
     def test_self_dependency(self):
-        """Пакет, зависящий сам от себя, представляет собой цикл из одного узла."""
+        """Пакет, зависящий сам от себя, — цикл из одного узла."""
         graph = build_graph(repo_from("A: A"), "A", UNLIMITED)
         self.assertEqual(graph.cycles, [("A", "A")])
 
     def test_shorter_path_expands_again(self):
-        """Узел, изначально встреченный слишком глубоко, раскрывается по более короткому пути."""
+        """Узел, найденный слишком глубоко, раскрывается по короткому пути."""
         repo = GraphFileRepository.from_file(EXAMPLES / "shortcut.txt")
         graph = build_graph(repo, "A", 3)
         self.assertIn("F", graph.nodes())
